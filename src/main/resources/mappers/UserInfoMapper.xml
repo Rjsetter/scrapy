@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="scrapy.myppers.UserMapper">
+    <select id="queryUserAll" resultType="scrapy.pojo.User">
+        select * from info
+    </select>
+
+    <select id="queryUserByLabel" resultType="scrapy.pojo.User">
+        select * from info where address = #{address}
+    </select>
+
+    <select id="queryAllAddress" resultType="java.lang.String">
+        select address from info
+    </select>
+
+    <select id="queryAllLabel" resultType="java.lang.String">
+        select label from info
+    </select>
+</mapper>

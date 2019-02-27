@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--跟标签-->
+<configuration>
+    <properties>
+        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/mybatis?useUnicode=true&amp;characterEncoding=utf-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+    </properties>
+    <settings>
+        <!--开启驼峰匹配-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!--<setting name="cacheEnabled" value="false"/>-->
+
+        <!--开启延迟加载-->
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <!--
+            默认为true，默认加载所有属性；为false时，当get某属性时完成加载
+        -->
+        <setting name="aggressiveLazyLoading" value="false"/>
+    </settings>
+    <!-- 环境，可以配置多个，default为指定采用的那个环境-->
+    <environments default="test">
+        <!-- id:唯一标识-->
+        <environment id="test">
+            <!-- 事物管理器，JDBC类型的事务管理器-->
+            <transactionManager type="JDBC"/>
+            <!-- 数据源，池类型数据-->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://127.0.0.1:3306/scrapy?characterEncoding=utf8"/>
+                <property name="username" value="root"/>
+                <property name="password" value="123456"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <mappers>
+        <mapper resource="mappers/UserInfoMapper.xml"/>
+    </mappers>
+</configuration>
