@@ -15,5 +15,5 @@ public interface TypeMapper {
      * @param id
      * @return
      */
-    public String queryUrlById(@Param("id") int id);
+    public Type queryUrlById(@Param("id") int id);
 }

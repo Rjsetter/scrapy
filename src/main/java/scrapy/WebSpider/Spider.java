@@ -2,19 +2,11 @@ package scrapy.WebSpider;
 
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
-import scrapy.Util.InserType;
-import scrapy.Util.InsertInfo;
-import scrapy.Util.getThreadTotal;
-import scrapy.pojo.Type;
 import scrapy.webSpiderTool.createThread;
 import scrapy.webSpiderTool.getChromeDriver;
 import scrapy.webSpiderTool.getTypes;
-import sun.java2d.loops.ProcessPath;
 
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -41,12 +33,12 @@ public class Spider {
         infoType.remove("电商");
         infoType.remove("电台");
         //将分类信息存入到本地数据库
-        infoType.forEach((k,v)->{
-            Type type = new Type();
-            type.setType(k);
-            type.setTypeUrl(v);
-            InserType.insertType(type);
-        });
+//        infoType.forEach((k,v)->{
+//            Type type = new Type();
+//            type.setType(k);
+//            type.setTypeUrl(v);
+//            typeMapperImp.insertType(type);
+//        });
         driver.close();
 
         Iterator<Map.Entry<String, String>> it = infoType.entrySet().iterator();
@@ -62,8 +54,8 @@ public class Spider {
 //            多线程
             Thread t = new createThread("https:" + entry.getValue(), entry.getKey());
 
-//            t.start();
-            if(c==4){
+            t.start();
+            if(c==5){
                 c=0;
                 Thread.sleep(600000);
             }

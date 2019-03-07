@@ -1,4 +1,4 @@
-package scrapy.Util;
+package scrapy.usermappers;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -6,15 +6,14 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import scrapy.myppers.TypeMapper;
 import scrapy.myppers.UserMapper;
-import scrapy.pojo.Type;
 import scrapy.pojo.User;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-public class InserType {
+public class userMapperImp {
+    public static UserMapper userMapper;
     public static SqlSession sqlSession;
-    public static TypeMapper typeMapper;
 
     public static void initSet() throws IOException {
         // 指定配置文件
@@ -29,30 +28,14 @@ public class InserType {
         // 2. 映射文件的statement的id必须和mapper接口的方法名保持一致
         // 3. Statement的resultType必须和mapper接口方法的返回类型一致
         // 4. statement的parameterType必须和mapper接口方法的参数类型一致（不一定）
-        typeMapper = sqlSession.getMapper(TypeMapper.class);
+        userMapper = sqlSession.getMapper(UserMapper.class);
     }
-
-    //插入博主分类信息
-    public static void insertType(Type type) {
+    public static void insert(User user) {
         try{
             initSet();
         }catch (IOException e){
-            System.out.println("数据插入有误！"+type);
+            System.out.println("数据插入有误！"+user);
         }
-        typeMapper.insertType(type);
-    }
-
-    //根据id查询用户地址
-    public static String selectUrlById(int id){
-        try{
-            initSet();
-        }catch (IOException e){
-            System.out.println("数据插入有误！"+id);
-        }
-        String url = typeMapper.queryUrlById(id);
-        return url;
-    }
-    public static void main(String []args){
-        System.out.println(selectUrlById(2));
+        userMapper.insertUser(user);
     }
 }

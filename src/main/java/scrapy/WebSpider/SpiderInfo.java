@@ -6,6 +6,8 @@ import scrapy.Util.RestClient;
 
 import java.io.IOException;
 
+import static scrapy.Util.JsonUtil.getValueByJPath;
+
 /**
  * 爬取个人信息
  */
@@ -16,10 +18,14 @@ public class SpiderInfo {
         String Url = "https://m.weibo.cn/profile/info?uid=3505635557";
         closeableHttpResponse = restClient.get(Url);
         JSONObject responseJson = restClient.getResponseJson(closeableHttpResponse);
-        System.out.println(responseJson);
+        String s = getValueByJPath(responseJson,"data/user");
+        System.out.println(s);
     }
-    public static void main(String []args){
-        try{spider();}catch (IOException e){
+
+    public static void main(String[] args) {
+        try {
+            spider();
+        } catch (IOException e) {
             System.out.println(e);
         }
     }

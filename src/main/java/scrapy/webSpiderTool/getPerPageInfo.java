@@ -1,5 +1,6 @@
 package scrapy.webSpiderTool;
 
+import com.vdurmont.emoji.EmojiParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -7,7 +8,7 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scrapy.Util.InsertInfo;
+import scrapy.usermappers.userMapperImp;
 import scrapy.pojo.User;
 
 import java.util.NoSuchElementException;
@@ -62,6 +63,7 @@ public class getPerPageInfo {
             String address = target.select("dd.mod_info.S_line1>div.info_add>span").text();
             //简介
             String info = target.select(" dd.mod_info.S_line1>div.info_intro>span").text();
+            info = EmojiParser.removeAllEmojis(info);
             //标签dd.mod_info.S_line1 > div
             String flag = null;
             if (target.select("dd.mod_info.S_line1 > div").hasClass("info_relation")) {
@@ -87,7 +89,7 @@ public class getPerPageInfo {
             User user = new User();
             user.setInfoid(Id);
             user.setLabel(flag);
-            user.setJianjie(info);
+            user.setJianjie(null);
             user.setSex(sex);
             user.setAddress(address);
             user.setWeiboNum(WBCount.replace("微博",""));
@@ -95,7 +97,7 @@ public class getPerPageInfo {
             user.setConcernNum(GZCount);
             user.setNickName(nickname);
             user.setType(type);
-            InsertInfo.insert(user);
+            userMapperImp.insert(user);
             logger.info("正在插入类型为"+type+"的博主信息:"+user.toString());
         }
         return nextUrl;

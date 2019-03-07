@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
-<mapper namespace="scrapy.myppers.TypeMapper">
+<mapper namespace="scrapy.myppers.FollowerMapper">
 
     <!-- 新增的Statement
      id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
@@ -12,13 +12,12 @@
      keyColumn：指定数据库的主键
      keyProperty：主键对应的pojo属性名
    -->
-    <insert id="insertType" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
-            parameterType="scrapy.pojo.Type">
-        insert into tb_weibo_type(id,type,typeUrl)
-        value (null,#{type},#{typeUrl})
+    <insert id="insertFollower" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="scrapy.pojo.Follower">
+        insert into tb_weibo_followers(id,uid,screen_name,profile_url,profile_image_url,verified,
+        followers_count,follow_count,followers_uid)
+        value (null,#{uid},#{screen_name},#{profile_url},#{profile_image_url},#{verified},
+        #{followers_count},#{follow_count},#{followers_uid})
     </insert>
 
-    <select id="queryUrlById" resultType="scrapy.pojo.Type">
-        SELECT * from tb_weibo_type where id = #{id}
-    </select>
 </mapper>
