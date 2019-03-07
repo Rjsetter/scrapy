@@ -39,5 +39,6 @@
     </environments>
     <mappers>
         <mapper resource="mappers/UserInfoMapper.xml"/>
+        <mapper resource="mappers/TypeInfoMapper"/>
     </mappers>
 </configuration>

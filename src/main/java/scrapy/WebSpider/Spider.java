@@ -2,7 +2,10 @@ package scrapy.WebSpider;
 
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+import scrapy.Util.InserType;
+import scrapy.Util.InsertInfo;
 import scrapy.Util.getThreadTotal;
+import scrapy.pojo.Type;
 import scrapy.webSpiderTool.createThread;
 import scrapy.webSpiderTool.getChromeDriver;
 import scrapy.webSpiderTool.getTypes;
@@ -33,12 +36,19 @@ public class Spider {
         }
 
         //获取需要爬取的信息的大类,用set数组储存遍历
-
         Map<String, String> infoType = getTypes.getInfoType(driver);
-        driver.close();
         infoType.remove("交通");
         infoType.remove("电商");
         infoType.remove("电台");
+        //将分类信息存入到本地数据库
+        infoType.forEach((k,v)->{
+            Type type = new Type();
+            type.setType(k);
+            type.setTypeUrl(v);
+            InserType.insertType(type);
+        });
+        driver.close();
+
         Iterator<Map.Entry<String, String>> it = infoType.entrySet().iterator();
         int c = 0;
         int count = 0;
@@ -52,7 +62,7 @@ public class Spider {
 //            多线程
             Thread t = new createThread("https:" + entry.getValue(), entry.getKey());
 
-            t.start();
+//            t.start();
             if(c==4){
                 c=0;
                 Thread.sleep(600000);
