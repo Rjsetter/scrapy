@@ -31,4 +31,10 @@ public interface UserMapper {
      * @return
      */
     public List<String> queryAllLabel();
+
+    /**
+     * 传入user类,插入数据
+     * @param user
+     */
+    public void insertUser(User user);
 }

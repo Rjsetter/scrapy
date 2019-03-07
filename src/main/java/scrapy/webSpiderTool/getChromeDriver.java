@@ -28,7 +28,7 @@ public class getChromeDriver {
         //禁止图片
         prefs.put("profile.managed_default_content_settings.images", 2);
         //禁止javascript
-//        prefs.put("profile.managed_default_content_settings.javascript", 2);
+        prefs.put("profile.managed_default_content_settings.javascript", 2);
         //禁止Css
         prefs.put("profile.managed_default_content_settings.css", 2); // 2就是代表禁止加载的意思
         chromeOptions.setExperimentalOption("prefs", prefs);

@@ -11,8 +11,15 @@ public class User {
     private String address;  //地址
     private String jianjie; //简介
     private String label; //标签
+    private String infoid;//用户唯一标识Id
 
+    public String getInfoid() {
+        return infoid;
+    }
 
+    public void setInfoid(String infoid) {
+        this.infoid = infoid;
+    }
 
     public int getId() {
         return id;
@@ -104,6 +111,7 @@ public class User {
                 ", weiboNum=" + weiboNum + '\'' +
                 ", address=" + address + '\'' +
                 ", jianjie=" + jianjie + '\'' +
+                ", infoId=" + infoid + '\'' +
                 ", label=" + label + '\'';
     }
 }

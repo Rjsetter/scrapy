@@ -4,8 +4,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class getPageCount {
+    //添加日志
+    private static final Logger logger = LoggerFactory.getLogger(getPageCount.class);
+
+
     /**
      * 接受浏览器头，返回每个标签下博主的页数
      *
@@ -21,7 +27,9 @@ public class getPageCount {
         try {
             length = Integer.parseInt(L.get(L.size() - 2).text());
         } catch (ArrayIndexOutOfBoundsException x) {
+            logger.error("没有加载出来的类有：" + type);
             System.out.println("没有加载出来的类有：" + type);
+
             return length;
         }
         return length;

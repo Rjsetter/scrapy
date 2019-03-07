@@ -4,12 +4,18 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
 public class getFlags {
+    //添加日志
+    private static final Logger logger = LoggerFactory.getLogger(getFlags.class);
+
+
     public static Set<String> getFlagsUrl(WebDriver driver, String type, String url) throws InterruptedException, IOException {
         //建立每个类型下所有页面的Url地址
 //        driver.navigate().to("https:"+url);

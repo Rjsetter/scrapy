@@ -2,14 +2,17 @@ package scrapy.WebSpider;
 
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
+import scrapy.Util.getThreadTotal;
 import scrapy.webSpiderTool.createThread;
 import scrapy.webSpiderTool.getChromeDriver;
 import scrapy.webSpiderTool.getTypes;
+import sun.java2d.loops.ProcessPath;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
+import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadInfo;
+import java.lang.management.ThreadMXBean;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class Spider {
@@ -48,11 +51,13 @@ public class Spider {
 //            getFlags.getFlagsUrl(driver,entry.getKey(),entry.getValue());
 //            多线程
             Thread t = new createThread("https:" + entry.getValue(), entry.getKey());
+
             t.start();
-            if (c == 4) {
-                c = 0;
-                Thread.sleep(300000);
+            if(c==4){
+                c=0;
+                Thread.sleep(600000);
             }
+
         }
         long endTime = System.currentTimeMillis();    //获取结束时间
         System.out.println("程序运行时间：" + (endTime - startTime) + "ms");    //输出程序运行时间

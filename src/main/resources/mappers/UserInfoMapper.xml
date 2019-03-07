@@ -19,4 +19,17 @@
     <select id="queryAllLabel" resultType="java.lang.String">
         select label from info
     </select>
+
+    <!-- 新增的Statement
+     id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
+     parameterType：参数的类型，使用动态代理之后和方法的参数类型一致
+     useGeneratedKeys:开启主键回写
+     keyColumn：指定数据库的主键
+     keyProperty：主键对应的pojo属性名
+   -->
+    <insert id="insertUser" useGeneratedKeys="true" keyColumn="id" keyProperty="id"
+            parameterType="scrapy.pojo.User">
+      insert into tb_weibo(id,type,nickName,sex,concernNum,fansNum,weiboNum,address,jianjie,label,infoid)
+      value (null,#{type},#{nickName},#{sex},#{concernNum},#{fansNum},#{weiboNum},#{address},#{jianjie},#{label},#{infoid})
+    </insert>
 </mapper>

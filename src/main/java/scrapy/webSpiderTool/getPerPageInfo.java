@@ -5,11 +5,19 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import scrapy.Util.InsertInfo;
+import scrapy.pojo.User;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 
+
 public class getPerPageInfo {
+    //添加日志
+    private static final Logger logger = LoggerFactory.getLogger(getPerPageInfo.class);
+
     /**
      * 爬取一个标签里的所有博主
      */
@@ -24,6 +32,7 @@ public class getPerPageInfo {
         }
         Thread.sleep(1000);
         Document doc = Jsoup.parse(driver.getPageSource());
+//        System.out.println(doc);
         //获取整个列表
         Elements nextUrlD = doc.select(" #Pl_Core_F4RightUserList__4 > div > div > div > div > div.WB_cardpage.S_line1 > div > a.page.next.S_txt1.S_line1");
         String nextUrl = nextUrlD.attr("href");
@@ -31,6 +40,11 @@ public class getPerPageInfo {
         for (Element target : targets) {
             //昵称
             String nickname = target.select("dd.mod_info.S_line1 >div.info_name.W_fb.W_f14>a.S_txt1").text();
+            //获取用户唯一标识
+            String id = target.select("dd.mod_info.S_line1 >div.info_name.W_fb.W_f14>a.S_txt1").attr("usercard");
+            String s = id.split("=")[1];
+            String Id = s.split("&")[0];
+            //System.out.println("测试爬取ID信息："+Id);
             //性别
             String sex = "空";
             if (target.select("dd.mod_info.S_line1>div.info_name.W_fb.W_f14>a>i").hasClass("W_icon icon_male")) {
@@ -49,27 +63,40 @@ public class getPerPageInfo {
             //简介
             String info = target.select(" dd.mod_info.S_line1>div.info_intro>span").text();
             //标签dd.mod_info.S_line1 > div
-            String flag = "空";
+            String flag = null;
             if (target.select("dd.mod_info.S_line1 > div").hasClass("info_relation")) {
                 flag = target.select("dd.mod_info.S_line1 > div.info_relation").text();
             }
-            System.out.println("----------------------------");
-            System.out.println("昵称:"+nickname);
-            System.out.println("性别:"+sex);
-            System.out.println("关注数:"+GZCount);
-            System.out.println("粉丝数:"+FSCount);
-            System.out.println("微博数:"+WBCount);
-            System.out.println("地址:"+address);
-            System.out.println("简介:"+info);
-            System.out.println(flag);
-//            address="test";
-//            info = "test";
-            //System.out.println(nextUrl);
-//            String sql = "insert into scrapy.info(type,label,nickName,sex,concernNum,fansNum,weiboNum,address,jianjie)Values("+type+","+flag+","+nickname+","+sex+","+GZCount+","+FSCount+","+WBCount+","+address+","+info+")";
-//            String regEx = "[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
-//            String sql = "insert into info2(type,label,nickName,sex,concernNum,fansNum,weiboNum,address,jianjie) values('" + type + "','" + flag + "','" + nickname + "','" + sex + "','" + GZCount + "','" + FSCount + "','" + WBCount + "','" + address + "','" + info.replaceAll(regEx, "") + "')";
-//            System.out.println(sql);
-//            mysqlInsert.insert(sql);
+//            System.out.println("----------------------------");
+//            System.out.println("昵称:"+nickname);
+//            System.out.println("性别:"+sex);
+//            System.out.println("关注数:"+GZCount.replace("关注",""));
+            String fans=FSCount.replace("粉丝","");
+            //筛选数据，万字改为数字0000，便于数据分析
+            if(fans.contains("万")){
+                 fans=fans.substring(0,fans.length()-1)+"0000";
+            }
+//            System.out.println("粉丝数:"+fans);
+//            System.out.println("微博数:"+WBCount.replace("微博",""));
+//            System.out.println("地址:"+address);
+//            System.out.println("简介:"+info);
+            //剔除"标签："
+            if(flag!=null)
+                flag=flag.substring(3,flag.length());
+
+            User user = new User();
+            user.setInfoid(Id);
+            user.setLabel(flag);
+            user.setJianjie(info);
+            user.setSex(sex);
+            user.setAddress(address);
+            user.setWeiboNum(WBCount.replace("微博",""));
+            user.setFansNum(fans);
+            user.setConcernNum(GZCount);
+            user.setNickName(nickname);
+            user.setType(type);
+            InsertInfo.insert(user);
+            logger.info("正在插入类型为"+type+"的博主信息:"+user.toString());
         }
         return nextUrl;
     }

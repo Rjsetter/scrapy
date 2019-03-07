@@ -72,4 +72,20 @@ public class userMapperTest {
             System.out.println(address);
         testDemo(addressList);
     }
+
+    @Test
+    public void insertUser(){
+        User user = new User();
+        user.setType("s");
+        user.setNickName("sd");
+        user.setSex("SD");
+        user.setConcernNum("d1000");
+        user.setFansNum("d1000");
+        user.setWeiboNum("d3432423");
+        user.setAddress("SDFffffff");
+        user.setJianjie("SFfsfsv");
+        user.setLabel("sfdffxcvvv");
+        user.setInfoid("");
+        this.userMapper.insertUser(user);
+    }
 }
