@@ -37,4 +37,11 @@ public interface UserMapper {
      * @param user
      */
     public void insertUser(User user);
+
+    /**
+     * 根据类型查询id
+     * @param type
+     * @return
+     */
+    public List<String> queryAllUidByType(@Param("type") String type);
 }

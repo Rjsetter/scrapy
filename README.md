@@ -74,3 +74,6 @@
      获取用户个人主页信息的接口：
      https://m.weibo.cn/profile/info?uid=3505635557
      参数uid为用户的唯一标识
+     
+     https://m.weibo.cn/profile/5872210260
+     更改Uid查看用户相关

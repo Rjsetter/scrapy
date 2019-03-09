@@ -20,6 +20,9 @@
         select label from info
     </select>
 
+    <select id="queryAllUidByType" resultType="java.lang.String">
+        SELECT infoid from tb_weibo where type = #{type}
+    </select>
     <!-- 新增的Statement
      id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
      parameterType：参数的类型，使用动态代理之后和方法的参数类型一致

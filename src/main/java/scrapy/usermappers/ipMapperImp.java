@@ -4,16 +4,14 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import scrapy.myppers.TypeMapper;
-import scrapy.myppers.UserMapper;
-import scrapy.pojo.User;
-
+import scrapy.myppers.IpMapper;
+import scrapy.pojo.IPBean;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.List;
 
-public class userMapperImp {
-    public static UserMapper userMapper;
+
+public class ipMapperImp {
+    public static IpMapper ipMapper;
     public static SqlSession sqlSession;
 
     public static void initSet() throws IOException {
@@ -29,23 +27,20 @@ public class userMapperImp {
         // 2. 映射文件的statement的id必须和mapper接口的方法名保持一致
         // 3. Statement的resultType必须和mapper接口方法的返回类型一致
         // 4. statement的parameterType必须和mapper接口方法的参数类型一致（不一定）
-        userMapper = sqlSession.getMapper(UserMapper.class);
-    }
-    public static void insert(User user) {
-        try{
-            initSet();
-        }catch (IOException e){
-            System.out.println("数据插入有误！"+user);
-        }
-        userMapper.insertUser(user);
+        ipMapper = sqlSession.getMapper(IpMapper.class);
     }
 
-    public static List<String> queryAllUidByType(String type){
+    public static void insert(IPBean ipBean) {
         try{
             initSet();
         }catch (IOException e){
-            System.out.println("数据chaxunyouwu！"+type);
+            System.out.println("数据插入有误！"+ipBean);
         }
-        return userMapper.queryAllUidByType(type);
+        ipMapper.insertIp(ipBean);
+    }
+
+    public static void main(String []args){
+        IPBean ipBean = new IPBean("128.125.100.1", 2255, 0);
+        insert(ipBean);
     }
 }
