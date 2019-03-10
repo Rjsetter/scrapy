@@ -21,4 +21,8 @@
     <select id="queryUrlById" resultType="scrapy.pojo.Type">
         SELECT * from tb_weibo_type where id = #{id}
     </select>
+
+    <select id="queryAllType" resultType="java.lang.String">
+        select type from tb_weibo_type
+    </select>
 </mapper>

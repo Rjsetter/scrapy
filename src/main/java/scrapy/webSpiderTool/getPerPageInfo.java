@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scrapy.usermappers.userMapperImp;
+import scrapy.mappersImp.userMapperImp;
 import scrapy.pojo.User;
 
 import java.util.NoSuchElementException;

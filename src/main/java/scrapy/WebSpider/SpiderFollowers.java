@@ -6,12 +6,15 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import scrapy.Util.RestClient;
 import scrapy.pojo.Follower;
-import scrapy.usermappers.followerMapperImp;
-import scrapy.usermappers.userMapperImp;
+import scrapy.pojo.IPBean;
+import scrapy.mappersImp.followerMapperImp;
+import scrapy.mappersImp.ipMapperImp;
+import scrapy.mappersImp.userMapperImp;
 
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static scrapy.Util.JsonUtil.getValueByJPath;
 
@@ -22,20 +25,20 @@ import static scrapy.Util.JsonUtil.getValueByJPath;
  * 参数：page： 可选，页数
  */
 public class SpiderFollowers {
-    public static void spider(String uid) throws IOException {
+    public static void spider(String uid, String ip, int port, String type) throws IOException {
         CloseableHttpResponse closeableHttpResponse;
         RestClient restClient = new RestClient();
         String BaseUrl = "https://m.weibo.cn/api/container/getIndex?";
-        String midUrl =  "containerid=231051_-_followers_-_"+uid+"&page=";
-        int pageSize=1;
+        String midUrl = "containerid=231051_-_followers_-_" + uid + "&page=";
+        int pageSize = 1;
         boolean jumpout = true;//用于退出循环
-        int count=0;
-        while(jumpout) {//判断是否已经到最后一页了
-            String Url = BaseUrl+midUrl+pageSize;
+        int count = 0;
+        while (jumpout) {//判断是否已经到最后一页了
+            String Url = BaseUrl + midUrl + pageSize;
             closeableHttpResponse = restClient.get(Url);
             JSONObject responseJson = restClient.getResponseJson(closeableHttpResponse);
             String test = getValueByJPath(responseJson, "data/cards");
-            if(test.length()<=2){//返回数据为空时
+            if (test.length() <= 2) {//返回数据为空时
                 jumpout = false;
                 break;
             }
@@ -72,21 +75,49 @@ public class SpiderFollowers {
                 i++;
             }
         }
-        System.out.println("一共关注了："+count+"个用户！");
+        System.out.println("一共关注了：" + count + "个用户！");
     }
 
     public static void main(String[] args) throws InterruptedException {
-        List<String> uidList ;
-        uidList = userMapperImp.queryAllUidByType("IT互联网");
-        int len =uidList.size();
-        for(int i=0;i<len;i++){
-            if(i%5==0)
-                Thread.sleep(10);
-        try {
-            spider(uidList.get(i));
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        //按类型查询数据库中得地址
+        List<String> uidList = userMapperImp.queryAllUidByType("IT互联网");
+        //查询数据库中的有效ip地址
+        List<IPBean> ips = ipMapperImp.getAllIps();
+        Map<Integer, IPBean> mapIps = new HashMap<Integer, IPBean>();
+        ips.forEach(ipBean -> mapIps.put(ipBean.getId(), ipBean));
+        int len = uidList.size();
+        int maxIndexSiza = mapIps.size();
+        String ip = ""; //IP地址
+        String type = "https";//请求类型
+        int port = 0;//端口号
+        int index = 0;//IP地址
+        for (int i = 0; i < len; i++) {
+            if (i % 3 == 0) {
+                ++index;
+                if(index==maxIndexSiza)//如果没有ip地址，就回归为1
+                    index=1;
+                port = mapIps.get(index).getPort();
+                ip = mapIps.get(index).getIp();
+                if (mapIps.get(index).getType() == 0)
+                    type = "http";
+                type = "https";
+            }
+            try {
+                spider(uidList.get(i), ip, port, type);
+            } catch (IOException e) {
+                System.out.println(e);
+            } catch (NullPointerException n) {
+                System.out.print("出现NullPointerException");
+                ++index;
+                port = mapIps.get(index).getPort();
+                ip = mapIps.get(index).getIp();
+                if (mapIps.get(index).getType() == 0)
+                    type = "http";
+                type = "https";
+                Thread.sleep(60000);
+                i--;
+                continue;
+            }
         }
     }
 }

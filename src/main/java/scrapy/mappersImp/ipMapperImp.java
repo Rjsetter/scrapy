@@ -1,20 +1,19 @@
-package scrapy.usermappers;
+package scrapy.mappersImp;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import scrapy.myppers.TypeMapper;
-import scrapy.myppers.UserMapper;
-import scrapy.pojo.Type;
-import scrapy.pojo.User;
-
+import scrapy.myppers.IpMapper;
+import scrapy.pojo.IPBean;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
-public class typeMapperImp {
+
+public class ipMapperImp {
+    public static IpMapper ipMapper;
     public static SqlSession sqlSession;
-    public static TypeMapper typeMapper;
 
     public static void initSet() throws IOException {
         // 指定配置文件
@@ -29,29 +28,45 @@ public class typeMapperImp {
         // 2. 映射文件的statement的id必须和mapper接口的方法名保持一致
         // 3. Statement的resultType必须和mapper接口方法的返回类型一致
         // 4. statement的parameterType必须和mapper接口方法的参数类型一致（不一定）
-        typeMapper = sqlSession.getMapper(TypeMapper.class);
+        ipMapper = sqlSession.getMapper(IpMapper.class);
     }
 
-    //插入博主分类信息
-    public static void insertType(Type type) {
+    public static void insert(IPBean ipBean) {
         try{
             initSet();
         }catch (IOException e){
-            System.out.println("数据插入有误！"+type);
+            System.out.println("数据插入有误！"+ipBean);
         }
-        typeMapper.insertType(type);
+        ipMapper.insertIp(ipBean);
     }
 
-    //根据id查询用户地址
-    public static Type selectUrlById(int id){
+    public static boolean deleteAllIp(){
         try{
             initSet();
         }catch (IOException e){
-            System.out.println("数据插入有误！"+id);
+            System.out.println("操作有误！");
         }
-        return typeMapper.queryUrlById(id);
+        if(ipMapper.deleteAllIp()>0)
+            return true;
+        return false;
     }
+
+    public static List<IPBean> getAllIps(){
+        try{
+            initSet();
+        }catch (IOException e){
+            System.out.println("查询有误！");
+        }
+        return ipMapper.getAllIp();
+    }
+
     public static void main(String []args){
-        System.out.println(selectUrlById(2));
+//        IPBean ipBean = new IPBean("128.125.100.1", 2255, 0);
+//        insert(ipBean);
+//        System.out.println("是否删除成功："+deleteAllIp());
+        List<IPBean> ips =getAllIps();
+        System.out.println(ips.size());
+        ips.forEach(ipbean->{System.out.print("ip地址："+ipbean.getIp()+",端口号："+ipbean.getPort()
+                +",请求类型："+ipbean.getType()+"\n");});
     }
 }

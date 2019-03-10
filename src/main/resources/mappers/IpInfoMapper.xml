@@ -18,4 +18,12 @@
         value (null,#{ip},#{port},#{type})
     </insert>
 
+    <delete id="deleteAllIp">
+        delete from tb_ip
+    </delete>
+
+    <select id="getAllIp" resultType="scrapy.pojo.IPBean">
+        select * from tb_ip
+    </select>
+
 </mapper>

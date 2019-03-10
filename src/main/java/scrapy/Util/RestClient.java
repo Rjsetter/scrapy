@@ -2,8 +2,10 @@ package scrapy.Util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.apache.http.HttpHost;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -40,6 +42,32 @@ public class RestClient {
         return httpResponse;
     }
 
+    /**
+     * 设置get请求的代理ip地址
+     * @param url    请求地址
+     * @param ip     ip地址
+     * @param port   端口号
+     * @param type   请求类型：https or http
+     * @return
+     * @throws ClientProtocolException
+     * @throws IOException
+     */
+    public CloseableHttpResponse get(String url,String ip,int port,String type) throws ClientProtocolException, IOException {
+        HttpHost proxy = new HttpHost(ip, 8080, type);
+        //把代理设置到请求配置
+        RequestConfig defaultRequestConfig = RequestConfig.custom()
+                .setProxy(proxy)
+                .build();
+        //创建一个可关闭的HttpClient对象
+        CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+        //创建一个HttpGet的请求对象
+        HttpGet httpget = new HttpGet(url);
+        //执行请求,相当于postman上点击发送按钮，然后赋值给HttpResponse对象接收
+        Log.info("开始发送get请求...");
+        CloseableHttpResponse httpResponse = httpclient.execute(httpget);
+        Log.info("发送请求成功！开始得到响应对象。");
+        return httpResponse;
+    }
     /**
      * 带请求头信息的get方法
      *

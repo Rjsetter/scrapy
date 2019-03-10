@@ -1,6 +1,6 @@
 package scrapy.WebSpider;
 
-import scrapy.usermappers.typeMapperImp;
+import scrapy.mappersImp.typeMapperImp;
 import scrapy.pojo.Type;
 import scrapy.webSpiderTool.createThread;
 

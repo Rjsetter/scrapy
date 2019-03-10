@@ -8,6 +8,7 @@ public class IPBean {
     private int port;
     private int type;
 
+    public IPBean(){}
 
     public IPBean(IPBean bean) {
         ip = bean.getIp();

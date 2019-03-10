@@ -1,18 +1,18 @@
-package scrapy.usermappers;
+package scrapy.mappersImp;
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
-import scrapy.myppers.IpMapper;
-import scrapy.pojo.IPBean;
+import scrapy.myppers.FollowerMapper;
+import scrapy.pojo.Follower;
+
 import java.io.IOException;
 import java.io.InputStream;
 
-
-public class ipMapperImp {
-    public static IpMapper ipMapper;
+public class followerMapperImp {
     public static SqlSession sqlSession;
+    public static FollowerMapper followerMapper;
 
     public static void initSet() throws IOException {
         // 指定配置文件
@@ -27,20 +27,24 @@ public class ipMapperImp {
         // 2. 映射文件的statement的id必须和mapper接口的方法名保持一致
         // 3. Statement的resultType必须和mapper接口方法的返回类型一致
         // 4. statement的parameterType必须和mapper接口方法的参数类型一致（不一定）
-        ipMapper = sqlSession.getMapper(IpMapper.class);
+        followerMapper = sqlSession.getMapper(FollowerMapper.class);
     }
 
-    public static void insert(IPBean ipBean) {
+    //插入博主分类信息
+    public static void insertType(Follower follower) {
         try{
             initSet();
         }catch (IOException e){
-            System.out.println("数据插入有误！"+ipBean);
+            System.out.println("数据插入有误！"+follower);
         }
-        ipMapper.insertIp(ipBean);
+        followerMapper.insertFollower(follower);
     }
 
     public static void main(String []args){
-        IPBean ipBean = new IPBean("128.125.100.1", 2255, 0);
-        insert(ipBean);
+        Follower follower = new Follower();
+        follower.setFollowers_uid("12444");
+        follower.setUid("3037994791");
+        follower.setScreen_name("sdfsdf");
+        insertType(follower);
     }
 }

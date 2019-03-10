@@ -1,9 +1,6 @@
-package scrapy.usermappers;
+package scrapy.mappersImp;
 
 import org.junit.Test;
-import scrapy.pojo.IPBean;
-
-import static org.junit.Assert.*;
 
 public class ipMapperInfoTest {
 

@@ -4,7 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import scrapy.pojo.IPBean;
-import scrapy.usermappers.ipMapperImp;
+import scrapy.mappersImp.ipMapperImp;
 
 
 import java.io.IOException;
