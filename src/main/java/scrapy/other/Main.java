@@ -17,7 +17,7 @@ public class Main {
         System.out.println("Start: ");
 
         IPSpider spider = new IPSpider();
-        List<IPBean> list = spider.crawlHttp(7);
+        List<IPBean> list = spider.crawlHttp(8);
         System.out.println("爬取数量：" + list.size());
         Gson gson = new Gson();
         for (IPBean ipBean : list) {

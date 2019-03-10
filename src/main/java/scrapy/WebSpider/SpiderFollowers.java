@@ -2,8 +2,13 @@ package scrapy.WebSpider;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.conn.HttpHostConnectException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import scrapy.Threads.ExecutorTest;
 import scrapy.Util.RestClient;
 import scrapy.pojo.Follower;
 import scrapy.pojo.IPBean;
@@ -11,7 +16,11 @@ import scrapy.mappersImp.followerMapperImp;
 import scrapy.mappersImp.ipMapperImp;
 import scrapy.mappersImp.userMapperImp;
 
+import javax.net.ssl.SSLException;
+import javax.net.ssl.SSLHandshakeException;
 import java.io.IOException;
+import java.net.SocketException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +33,11 @@ import static scrapy.Util.JsonUtil.getValueByJPath;
  * 参数：containerid ：231051_-_followers_-_6037687121 其中后面数字信息为UID前面固定
  * 参数：page： 可选，页数
  */
-public class SpiderFollowers {
-    public static void spider(String uid, String ip, int port, String type) throws IOException {
+public class SpiderFollowers  {
+    //添加日志
+    private static final Logger logger = LoggerFactory.getLogger(SpiderFollowers.class);
+
+    public static void spider(String uid, String ip, int port, String type) throws IOException ,InterruptedException{
         CloseableHttpResponse closeableHttpResponse;
         RestClient restClient = new RestClient();
         String BaseUrl = "https://m.weibo.cn/api/container/getIndex?";
@@ -33,11 +45,35 @@ public class SpiderFollowers {
         int pageSize = 1;
         boolean jumpout = true;//用于退出循环
         int count = 0;
+        String test = "";//获取文本
+        JSONObject responseJson = null;
         while (jumpout) {//判断是否已经到最后一页了
             String Url = BaseUrl + midUrl + pageSize;
-            closeableHttpResponse = restClient.get(Url);
-            JSONObject responseJson = restClient.getResponseJson(closeableHttpResponse);
-            String test = getValueByJPath(responseJson, "data/cards");
+            try{
+            closeableHttpResponse = restClient.get(Url,ip,port,type);
+            responseJson = restClient.getResponseJson(closeableHttpResponse);
+            test = getValueByJPath(responseJson, "data/cards");
+            }catch (NullPointerException noP){
+                System.out.println("出现空指针错误，需要等待轮询！轮询间隔10秒！");
+                Thread.sleep(10000);
+                continue;
+            }catch (SSLHandshakeException ssl){
+                logger.error("出现握手失败，url为:"+Url+",IP地址为："+ip+",端口号为："+port+",请求类型为："+type);
+                Thread.sleep(3000);
+                continue;
+            }catch (HttpHostConnectException h){
+                System.out.println("连接超时，正在尝试重新连接，当前IP为："+ip);
+                continue;
+            }catch (JSONException json){
+                System.out.println("json错误，当前IP为："+ip);
+            }catch (SocketException socket){
+                logger.error("软件导致连接中止，：recv失败：当前IP为："+ip+",当前Uid为："+uid);
+                continue;
+            }catch (SSLException  ssls){
+                logger.error("出现认证错误当前IP为："+ip+",当前Uid为："+uid);
+                System.out.println(ssls);
+                continue;
+            }
             if (test.length() <= 2) {//返回数据为空时
                 jumpout = false;
                 break;
@@ -53,7 +89,7 @@ public class SpiderFollowers {
                 String s = getValueByJPath(responseJson, "data/cards[" + index + "]/card_group");
                 array = JSON.parseArray(s);
             }
-            System.out.println(array.size());
+//            System.out.println("当前页面爬取的用户数："+array.size());
             int length = array.size();
             int i = 0;
             while (i < length) {
@@ -73,9 +109,10 @@ public class SpiderFollowers {
                 followerMapperImp.insertType(follower);
                 count++;
                 i++;
+//                System.out.println("正在爬取用户Uid为"+uid+"第" + i + "页，目前爬取了"+count+"个用户！");
             }
         }
-        System.out.println("一共关注了：" + count + "个用户！");
+        logger.error("用户Uid为"+uid+"已爬取完成");
     }
 
     public static void main(String[] args) throws InterruptedException {

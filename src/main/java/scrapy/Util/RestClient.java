@@ -53,17 +53,23 @@ public class RestClient {
      * @throws IOException
      */
     public CloseableHttpResponse get(String url,String ip,int port,String type) throws ClientProtocolException, IOException {
-        HttpHost proxy = new HttpHost(ip, 8080, type);
-        //把代理设置到请求配置
-        RequestConfig defaultRequestConfig = RequestConfig.custom()
-                .setProxy(proxy)
+        //设置代理IP、端口、协议（请分别替换）
+        System.out.println("当前使用Ip为"+ip);
+        HttpHost proxy = new HttpHost(ip, port,type);
+//把代理设置到请求配置
+        RequestConfig defaultRequestConfig = RequestConfig.custom().setProxy(proxy).build();
+//实例化CloseableHttpClient对象
+        CloseableHttpClient httpclient = HttpClients.custom()
+                .setDefaultRequestConfig(defaultRequestConfig)
                 .build();
-        //创建一个可关闭的HttpClient对象
-        CloseableHttpClient httpclient = HttpClients.custom().setDefaultRequestConfig(defaultRequestConfig).build();
+
         //创建一个HttpGet的请求对象
         HttpGet httpget = new HttpGet(url);
         //执行请求,相当于postman上点击发送按钮，然后赋值给HttpResponse对象接收
         Log.info("开始发送get请求...");
+        //设置代理
+        //设置请求头消息
+//        httpget.setHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
         CloseableHttpResponse httpResponse = httpclient.execute(httpget);
         Log.info("发送请求成功！开始得到响应对象。");
         return httpResponse;
