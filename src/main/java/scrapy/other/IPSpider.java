@@ -61,7 +61,7 @@ public class IPSpider {
         Document document = Jsoup.parse(html);
         Elements eles = document.selectFirst("table").select("tr");
 
-        for (int i = 0; i < eles.size(); i++){
+        for (int i = 0; i < eles.size(); i++) {
             if (i == 0) continue;
             Element ele = eles.get(i);
             String ip = ele.children().get(1).text();

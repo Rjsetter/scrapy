@@ -44,4 +44,10 @@ public interface UserMapper {
      * @return
      */
     public List<String> queryAllUidByType(@Param("type") String type);
+
+    /**
+     * 根据Uid更新博主状态，true为已经爬取完成，false为还未爬取关注信息
+     * @param uid
+     */
+    public void updateStatusByUid(@Param("uid") String uid);
 }

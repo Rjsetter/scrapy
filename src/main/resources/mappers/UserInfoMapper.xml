@@ -21,7 +21,7 @@
     </select>
 
     <select id="queryAllUidByType" resultType="java.lang.String">
-        SELECT infoid from tb_weibo where type = #{type}
+        SELECT infoid from tb_weibo where type = #{type} and jianjie='false'
     </select>
     <!-- 新增的Statement
      id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
@@ -35,4 +35,8 @@
       insert into tb_weibo(id,type,nickName,sex,concernNum,fansNum,weiboNum,address,jianjie,label,infoid)
       value (null,#{type},#{nickName},#{sex},#{concernNum},#{fansNum},#{weiboNum},#{address},#{jianjie},#{label},#{infoid})
     </insert>
+
+    <update id="updateStatusByUid" parameterType="java.lang.String">
+        UPDATE tb_weibo set jianjie ='true' where infoid=#{uid}
+    </update>
 </mapper>

@@ -14,7 +14,7 @@ public class ExecutorProcessPool {
 
     private ExecutorService executor;
     private static ExecutorProcessPool pool = new ExecutorProcessPool();
-    private final int threadMax = 500;
+    private final int threadMax = 150;
 
     private ExecutorProcessPool() {
         System.out.println("threadMax>>>>>>>" + threadMax);

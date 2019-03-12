@@ -57,17 +57,29 @@ public class userMapperImp {
         }
         return userMapper.queryUserAll();
     }
+    public static void setTrue(String uid){
+        try {
+            initSet();
+        } catch (IOException e) {
+            System.out.println("更新错误！");
+        }
+        userMapper.updateStatusByUid(uid);
+    }
 
     public static void main(String[] args) {
-        List<User> users = queryAllUser();
-        int totalNum=0;
-        for(int i=0;i<users.size();i++) {
-            int concernNum = Integer.parseInt(users.get(i).getConcernNum().replace("关注", ""));
-            if(concernNum>=200)
-                concernNum=196;
-            totalNum+=concernNum;
-        }
-        System.out.println("一共关注数为："+totalNum);
+        setTrue("2742920065");
+        List<String> users = queryAllUidByType("萌宠");
+        System.out.println(users.size());
+//        List<User> users = queryAllUser();
+//        int totalNum=0;
+//        for(int i=0;i<users.size();i++) {
+//            int concernNum = Integer.parseInt(users.get(i).getConcernNum().replace("关注", ""));
+//            if(concernNum>=200)
+//                concernNum=196;
+//            totalNum+=concernNum;
+//        }
+//        System.out.println("一共关注数为："+totalNum);
 
     }
+
 }

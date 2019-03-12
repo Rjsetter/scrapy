@@ -18,7 +18,7 @@ public class SpiderFans {
     public static void spider() throws IOException {
         CloseableHttpResponse closeableHttpResponse;
         RestClient restClient = new RestClient();
-        String Url = "https://m.weibo.cn/api/container/getIndex?containerid=231051_-_fans_-_1195242865";
+        String Url = "https://m.weibo.cn/api/container/getIndex?containerid=231051_-_fans_-_1195242865&since_id=299";
         closeableHttpResponse = restClient.get(Url);
         JSONObject responseJson = restClient.getResponseJson(closeableHttpResponse);
         String s = getValueByJPath(responseJson,"data/cards[0]/card_group");

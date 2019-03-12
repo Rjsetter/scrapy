@@ -54,10 +54,12 @@ public class RestClient {
      */
     public CloseableHttpResponse get(String url,String ip,int port,String type) throws ClientProtocolException, IOException {
         //设置代理IP、端口、协议（请分别替换）
-        System.out.println("当前使用Ip为"+ip);
         HttpHost proxy = new HttpHost(ip, port,type);
-//把代理设置到请求配置
-        RequestConfig defaultRequestConfig = RequestConfig.custom().setProxy(proxy).build();
+        //把代理设置到请求配置,并设置连接超时和读取超时时间
+        RequestConfig defaultRequestConfig = RequestConfig.custom()
+                .setConnectTimeout(5000).setConnectionRequestTimeout(1000)
+                .setSocketTimeout(5000)
+                .setProxy(proxy).build();
 //实例化CloseableHttpClient对象
         CloseableHttpClient httpclient = HttpClients.custom()
                 .setDefaultRequestConfig(defaultRequestConfig)
@@ -72,6 +74,7 @@ public class RestClient {
 //        httpget.setHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36");
         CloseableHttpResponse httpResponse = httpclient.execute(httpget);
         Log.info("发送请求成功！开始得到响应对象。");
+        System.out.println("当前使用Ip为"+ip+",下面开始爬取信息！");
         return httpResponse;
     }
     /**
