@@ -32,7 +32,8 @@ public class spiderIp {
      * @param page  需要爬去的页数
      */
     public static void spider(int page) {
-        for(int j=1;j<page;j++){
+        for(int j=51;j<=page;j++){
+
          String html = HttpUtils.getResponseContent(HTTPS_API+j);
 //         System.out.println(html);
             Document document = Jsoup.parse(html);
@@ -49,7 +50,7 @@ public class spiderIp {
                 String ipType = ele.children().get(4).text().trim();
                 int type;
                 System.out.println("正在检查Ip:"+ip);
-                if(liveTime.contains("天")&&ipType.equals("高匿")) {
+                if(liveTime.contains("天")) {
                     if ("HTTP".equalsIgnoreCase(typeStr))
                         type = IPBean.TYPE_HTTP;
                     else
@@ -68,6 +69,6 @@ public class spiderIp {
 
     }
     public static  void main(String []args){
-        spider(50);
+        spider(70);
     }
 }

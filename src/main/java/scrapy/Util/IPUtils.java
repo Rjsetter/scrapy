@@ -43,9 +43,9 @@ public class IPUtils {
     public static boolean isValid(IPBean ipBean) {
         Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(ipBean.getIp(), ipBean.getPort()));
         try {
-            URLConnection httpCon = new URL("https://m.weibo.cn/api/container/getIndex?containerid=231051_-_followers_-_2046556007").openConnection(proxy);
-            httpCon.setConnectTimeout(1000);
-            httpCon.setReadTimeout(1000);
+            URLConnection httpCon = new URL("https://www.baidu.com").openConnection(proxy);
+            httpCon.setConnectTimeout(2000);
+            httpCon.setReadTimeout(2000);
             int code = ((HttpURLConnection) httpCon).getResponseCode();
             System.out.println("有效的ip地址："+ipBean.getIp()+"-->"+ipBean.getPort()+"->"+ipBean.getType());
             //插入有效的ip地址到数据库中

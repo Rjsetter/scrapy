@@ -125,6 +125,7 @@ public class SpiderFollowers {
                 ip = getIp(index, mapIps);
                 port = getPort(index, mapIps);
                 System.out.println(ssls);
+                continue;
             } catch (NoHttpResponseException nor) {
                 System.out.println("没有返回！现在开始重新重试！");
                 int index = r.nextInt(ips.size());
@@ -140,7 +141,7 @@ public class SpiderFollowers {
                 Thread.sleep(500);
                 continue;
             }catch(ConnectTimeoutException c){
-                System.out.println("连接超时,现在开始重新请求！");
+                System.out.println("连接超时,现在开始重新请求！-->"+ip);
                 int index = r.nextInt(ips.size());
                 ip = getIp(index, mapIps);
                 port = getPort(index, mapIps);

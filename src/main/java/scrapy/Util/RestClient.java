@@ -54,7 +54,7 @@ public class RestClient {
      */
     public CloseableHttpResponse get(String url,String ip,int port,String type) throws ClientProtocolException, IOException {
         //设置代理IP、端口、协议（请分别替换）
-        HttpHost proxy = new HttpHost(ip, port,type);
+        HttpHost proxy = new HttpHost(ip, port,"http");
         //把代理设置到请求配置,并设置连接超时和读取超时时间
         RequestConfig defaultRequestConfig = RequestConfig.custom()
                 .setConnectTimeout(5000).setConnectionRequestTimeout(1000)
